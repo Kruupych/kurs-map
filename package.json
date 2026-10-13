@@ -1,0 +1,9 @@
+{
+  "name": "kurs-map",
+  "private": true,
+  "type": "module",
+  "description": "Курсы валют в отделениях банков рядом, на карте. Данные myfin.by.",
+  "scripts": {
+    "start": "node serve.mjs"
+  }
+}
