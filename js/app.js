@@ -24,14 +24,15 @@ const RADII = [
 const DEFAULT_SETTINGS = {
   city: 'minsk',
   currency: 'usd',
-  side: 'buy',
-  radius: '3',
+  side: 'sell',
+  radius: '1',
   sortBy: 'price',
   openOnly: true,
   amount: '',
 };
 
-const settings = { ...DEFAULT_SETTINGS, ...readCache('settings')?.value };
+const userChoices = readCache('choices')?.value ?? {};
+const settings = { ...DEFAULT_SETTINGS, ...userChoices };
 const state = {
   rates: null,
   ratesSavedAt: null,
@@ -154,7 +155,8 @@ function toggleSheet() {
 
 function updateSettings(patch, { markers = true } = {}) {
   Object.assign(settings, patch);
-  writeCache('settings', settings);
+  Object.assign(userChoices, patch);
+  writeCache('choices', userChoices);
   render({ markers });
 }
 
