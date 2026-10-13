@@ -18,3 +18,7 @@ export function writeCache(key, value) {
     console.warn(`Кэш «${key}» не сохранён: ${error.message}`);
   }
 }
+
+export function removeCache(key) {
+  localStorage.removeItem(PREFIX + key);
+}

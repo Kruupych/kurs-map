@@ -13,14 +13,37 @@
   <main class="map-area">
     <div id="map" aria-label="Карта отделений"></div>
     <div class="toolbar">
-      <div class="segmented" id="side" role="group" aria-label="Операция">
-        <button type="button" data-value="buy">Купить</button>
-        <button type="button" data-value="sell">Сдать</button>
+      <div class="toolbar__row">
+        <div class="segmented" id="side" role="group" aria-label="Операция">
+          <button type="button" data-value="buy">Купить</button>
+          <button type="button" data-value="sell">Сдать</button>
+        </div>
+        <div class="segmented" id="currency" role="group" aria-label="Валюта">
+          <button type="button" data-value="usd">USD</button>
+          <button type="button" data-value="eur">EUR</button>
+          <button type="button" data-value="rub">RUB</button>
+        </div>
       </div>
-      <div class="segmented" id="currency" role="group" aria-label="Валюта">
-        <button type="button" data-value="usd">USD</button>
-        <button type="button" data-value="eur">EUR</button>
-        <button type="button" data-value="rub">RUB</button>
+      <div class="toolbar__row">
+        <div class="dropdown">
+          <button type="button" class="chip chip--menu" id="radius-button" aria-haspopup="menu" aria-expanded="false" aria-controls="radius-menu"></button>
+          <div class="menu" id="radius-menu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-value="1">В радиусе 1 км</button>
+            <button type="button" role="menuitemradio" data-value="3">В радиусе 3 км</button>
+            <button type="button" role="menuitemradio" data-value="5">В радиусе 5 км</button>
+            <button type="button" role="menuitemradio" data-value="all">По всему городу</button>
+          </div>
+        </div>
+        <button type="button" class="chip" id="open-only">Открытые</button>
+        <button type="button" class="chip chip--menu" id="amount-button" aria-haspopup="dialog"></button>
+        <button type="button" class="chip chip--menu" id="city-button" aria-haspopup="dialog"></button>
+      </div>
+      <div class="notice" id="notice" hidden>
+        <p id="notice-text"></p>
+        <div class="notice__actions">
+          <button type="button" id="notice-retry">Определить снова</button>
+          <button type="button" id="notice-close">Скрыть</button>
+        </div>
       </div>
     </div>
     <button type="button" class="locate" id="locate" aria-label="Показать моё местоположение">
@@ -29,39 +52,43 @@
   </main>
 
   <section class="sheet" id="sheet">
-    <header class="sheet__head">
-      <button type="button" class="sheet__toggle" id="sheet-toggle" aria-expanded="false" aria-label="Развернуть список"></button>
-      <div class="summary" id="summary" aria-live="polite"></div>
-      <div class="filters">
-        <div class="segmented segmented--small" id="radius" role="group" aria-label="Радиус">
-          <button type="button" data-value="1">1 км</button>
-          <button type="button" data-value="3">3 км</button>
-          <button type="button" data-value="5">5 км</button>
-          <button type="button" data-value="all">Город</button>
-        </div>
-        <label class="check">
-          <input type="checkbox" id="open-only">
-          <span>Открытые</span>
-        </label>
-        <div class="segmented segmented--small" id="sort" role="group" aria-label="Сортировка">
-          <button type="button" data-value="price">По курсу</button>
-          <button type="button" data-value="distance">Ближе</button>
-        </div>
-        <label class="amount">
-          <input type="text" id="amount" inputmode="decimal" autocomplete="off" placeholder="Сумма" aria-label="Сумма обмена">
-          <span id="amount-unit">USD</span>
-        </label>
-      </div>
-    </header>
+    <button type="button" class="sheet__toggle" id="sheet-toggle" aria-expanded="false" aria-label="Развернуть список"></button>
+    <div class="summary" id="summary" aria-live="polite"></div>
     <ol class="list" id="list"></ol>
     <footer class="status">
-      <select id="city" aria-label="Город"></select>
       <span id="status-text" aria-live="polite"></span>
       <button type="button" id="refresh" class="refresh" aria-label="Обновить курсы">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
       </button>
     </footer>
   </section>
+
+  <dialog class="dialog" id="amount-dialog" aria-labelledby="amount-title">
+    <form method="dialog" class="dialog__body" id="amount-form">
+      <h2 id="amount-title">Сумма обмена</h2>
+      <p class="dialog__hint">Список покажет, сколько вы получите или заплатите в каждом отделении.</p>
+      <label class="amount-field">
+        <input type="text" id="amount-input" inputmode="decimal" autocomplete="off" placeholder="0">
+        <span id="amount-unit">USD</span>
+      </label>
+      <div class="quick-amounts" id="quick-amounts"></div>
+      <div class="dialog__actions">
+        <button type="button" class="button button--plain" id="amount-clear">Без суммы</button>
+        <button type="submit" class="button" value="apply">Показать</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog dialog--tall" id="city-dialog" aria-labelledby="city-title">
+    <div class="dialog__body">
+      <div class="dialog__header">
+        <h2 id="city-title">Город</h2>
+        <button type="button" class="button button--plain" id="city-close">Закрыть</button>
+      </div>
+      <input type="search" class="city-search" id="city-search" placeholder="Найти город" autocomplete="off" aria-label="Найти город">
+      <ul class="city-list" id="city-list"></ul>
+    </div>
+  </dialog>
 
   <script type="module" src="js/app.js"></script>
 </body>
